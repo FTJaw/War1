@@ -1,0 +1,269 @@
+/* ========================================
+   KLIMAT.CSS
+   Sekcja ze zdjęciami blur i napisami
+   NAPISY WYCENTROWANE I LEWITUJĄCE
+   ======================================== */
+
+/* ========================================
+   KLIMAT SECTION
+   ======================================== */
+
+.klimat-section {
+    position: relative;
+    min-height: 800vh; /* Długa sekcja do scrollowania */
+    width: 100%;
+}
+
+/* ========================================
+   STICKY CONTAINER - przyklejone tło i napisy
+   ======================================== */
+
+.klimat-sticky {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ========================================
+   TŁO ZE ZDJĘCIAMI
+   ======================================== */
+
+.klimat-backgrounds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.klimat-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1.2s ease;
+}
+
+.klimat-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(0px);
+    transform: scale(1.1);
+    transition: filter 1.2s ease;
+}
+
+/* Aktywne zdjęcie */
+.klimat-bg.is-active {
+    opacity: 1;
+}
+
+.klimat-bg.is-active img {
+    filter: blur(0px);
+}
+
+/* Poprzednie zdjęcie - blur out */
+.klimat-bg.is-previous {
+    opacity: 1;
+}
+
+.klimat-bg.is-previous img {
+    filter: blur(30px);
+}
+
+/* ========================================
+   OVERLAY - przyciemnienie
+   ======================================== */
+
+.klimat-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 5;
+}
+
+/* ========================================
+   TYTUŁ SEKCJI
+   ======================================== */
+
+
+
+/* ========================================
+   NAPISY - WYCENTROWANE I LEWITUJĄCE
+   ======================================== */
+
+.klimat-words {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.klimat-word {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    
+    /* Niewidoczny domyślnie */
+    opacity: 0;
+    
+    transition: 
+        opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.klimat-word__text {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 12vw, 8rem);
+    font-weight: 300;
+    font-style: italic;
+    color: #fff;
+    text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.02em;
+    
+    /* Efekt unoszenia */
+    display: inline-block;
+}
+
+/* Stan: wchodzi (od dołu z blur) */
+.klimat-word.is-entering {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 60px));
+    filter: blur(20px);
+}
+
+/* Stan: widoczny (wycentrowany, ostry) */
+.klimat-word.is-visible {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    filter: blur(0);
+}
+
+/* Stan: wychodzi (do góry z blur) */
+.klimat-word.is-exiting {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 60px));
+    filter: blur(20px);
+}
+
+/* ========================================
+   SCROLL INDICATOR
+   ======================================== */
+
+.klimat-scroll-hint {
+    position: absolute;
+    bottom: var(--space-xl);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+    opacity: 0.6;
+    transition: opacity 0.4s ease;
+}
+
+.klimat-scroll-hint span {
+    font-size: var(--text-xs);
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+}
+
+.klimat-scroll-hint__line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+}
+
+.klimat-section.is-scrolled .klimat-scroll-hint {
+    opacity: 0;
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+    .klimat-section {
+        min-height: 600vh;
+    }
+    
+    .klimat-word__text {
+        font-size: clamp(2rem, 15vw, 5rem);
+    }
+    
+    .klimat-title {
+        font-size: clamp(3rem, 25vw, 8rem);
+    }
+}
+
+/* ========================================
+   REDUCED MOTION
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .klimat-word {
+        transition: opacity 0.3s ease;
+        filter: none !important;
+    }
+    
+    .klimat-word.is-entering,
+    .klimat-word.is-visible,
+    .klimat-word.is-exiting {
+        transform: translate(-50%, -50%);
+    }
+    
+    .klimat-bg img {
+        transition: opacity 0.3s ease;
+        filter: none !important;
+    }
+}
+
+/* ========================================
+   SOFT THEME — klimat
+   (nadpisania na końcu pliku; usuń blok, żeby wrócić do poprzedniego wyglądu)
+   ======================================== */
+
+/* przyciemnienie w kolorze tuszu zamiast czystej czerni, lżejsze */
+.klimat-overlay {
+    background: rgba(61, 59, 70, 0.34);
+}
+
+.klimat-word__text {
+    text-shadow: 0 2px 36px rgba(40, 36, 50, 0.45);
+}
+
+.klimat-scroll-hint span {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-style: italic;
+    text-transform: none;
+    letter-spacing: 0.03em;
+}
+
+/* ta animacja była zdefiniowana tylko w workshop.css, więc na stronie O nas linia nie pulsowała */
+@keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+}
